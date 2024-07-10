@@ -1,3 +1,38 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login, logout
+from .forms import SignupForm, LoginForm 
 
-# Create your views here.
+# HomePage
+def index(request):
+    return(request, 'index.html')
+
+# SignupPage
+def user_signup(request):
+    if request.method == 'POST':
+        form = SignupForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('Login')
+    else:
+        form = SignupForm()
+    return render(request, 'signup.html', {'form': form})
+
+# LoginPage
+def user_login(request):
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(request, username=username, password=password)
+            if user:
+                login(request, user)
+                return redirect('home')
+    else:
+        form = LoginForm()
+    return render(request, 'Login.html', {'form': form})
+
+# LogoutPage
+def user_logout(request):
+    logout(request)
+    return redirect('login')
