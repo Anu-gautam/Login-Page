@@ -4,7 +4,7 @@ from .forms import SignupForm, LoginForm
 
 # HomePage
 def index(request):
-    return(request, 'index.html')
+    return render(request, 'index.html')
 
 # SignupPage
 def user_signup(request):
@@ -12,7 +12,7 @@ def user_signup(request):
         form = SignupForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('Login')
+            return redirect('login')
     else:
         form = SignupForm()
     return render(request, 'signup.html', {'form': form})
@@ -30,7 +30,7 @@ def user_login(request):
                 return redirect('home')
     else:
         form = LoginForm()
-    return render(request, 'Login.html', {'form': form})
+    return render(request, 'login.html', {'form': form})
 
 # LogoutPage
 def user_logout(request):
